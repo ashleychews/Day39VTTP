@@ -1,0 +1,13 @@
+<webcam [height]="500" [width]="500" (imageCapture)="handleImage($event)" [trigger]="trigger$">
+
+</webcam>
+
+<div>
+    <button type="button" (click)="snap()">Snap Image</button>
+    <button type="button" (click)="clear()">Clear</button>
+</div>
+
+<div (click)="upload()">
+    <h2>Your Image</h2>
+    <img [src]="image">
+</div>
