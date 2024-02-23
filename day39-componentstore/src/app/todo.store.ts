@@ -1,6 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { Todo, TodoSlice } from "./models";
+import { DBStore } from "./db.store";
 
 const INIT_STORE: TodoSlice = {
   loadedOn: 0,
@@ -8,9 +9,34 @@ const INIT_STORE: TodoSlice = {
 }
 
 @Injectable()
-export class TodoStore extends ComponentStore<TodoSlice> {
+export class TodoStore extends ComponentStore<TodoSlice>{
 
-    constructor() { super(INIT_STORE) }
+    todolist$!: Promise<Todo[]>
+    
+    private db = inject(DBStore)
+
+    todos!: Todo[]
+
+    constructor() { 
+        super(INIT_STORE) 
+        this.db.getAllTodos().then(value => {
+            console.info("run me", value)
+            this.setState({
+              loadedOn: 0,
+              todos: value
+    })})
+    }
+
+    // ngrxOnStoreInit(): void {
+    //     console.info("ngoninit")
+    //     this.db.getAllTodos().then(value => {
+    //         console.info("run me", value)
+    //         this.setState({
+    //           loadedOn: 0,
+    //           todos: value
+    // })})
+    // }
+
 
     // Selectors
     readonly getTodos = this.select<Todo[]>(
@@ -32,6 +58,13 @@ export class TodoStore extends ComponentStore<TodoSlice> {
     // Mutators
     readonly deleteTaskByDate = this.updater<string>(
         (slice: TodoSlice, date: string) => {
+            this.db.deleteTodo(date)
+            .then(() => {
+                return {
+                    loadedOn: slice.loadedOn,
+                    todos: slice.todos.filter(todo => date != todo.date)
+            }})
+        //need to return updated slice!!
         return {
             loadedOn: slice.loadedOn,
             todos: slice.todos.filter(todo => date != todo.date)
@@ -55,6 +88,26 @@ export class TodoStore extends ComponentStore<TodoSlice> {
             loadedOn: slice.loadedOn,
             todos: [ ...slice.todos, todo ]
         }
+        }
+    )
+
+    //adding into indexdb
+    //update takes the todo object
+    readonly addTask =  this.updater<Todo>(
+        //first parameter is slice, second is the object
+        (slice: TodoSlice, todo: Todo) => {
+            this.db.addTodo(todo)
+                .then(() => {
+                    return {
+                        loadedOn: slice.loadedOn,
+                        todos: [ ...slice.todos, todo ]
+                    }
+                })
+            //need to return updated slice!!
+            return {
+                loadedOn: slice.loadedOn,
+                todos: [ ...slice.todos, todo ]
+            }
         }
     )
 

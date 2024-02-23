@@ -7,6 +7,7 @@ import { EntryComponent } from './components/entry.component';
 import { ListingsComponent } from './components/listings.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TodoStore } from './todo.store';
+import { DBStore } from './db.store';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { TodoStore } from './todo.store';
     AppRoutingModule,
     ReactiveFormsModule
   ],
-  providers: [TodoStore],
+  providers: [TodoStore, DBStore],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
