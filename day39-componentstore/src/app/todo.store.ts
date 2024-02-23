@@ -10,8 +10,6 @@ const INIT_STORE: TodoSlice = {
 
 @Injectable()
 export class TodoStore extends ComponentStore<TodoSlice>{
-
-    todolist$!: Promise<Todo[]>
     
     private db = inject(DBStore)
 
