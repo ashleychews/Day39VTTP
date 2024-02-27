@@ -1,0 +1,22 @@
+<h2>Weather</h2>
+
+<form [formGroup]="form">
+    <div>
+        City: <input type="text" size="30" formControlName="city">
+        <button type="submit" (click)="addCity()">Add</button>
+    </div>
+</form>
+
+<br>
+<div>
+    <table border="1" *ngIf="cityList$|async as cities">
+        <tr *ngFor="let c of cities">
+            <a [routerLink]="['/weather', c.name]">
+                <h3>{{ c.name | titlecase}}</h3>
+            </a>
+
+            <span><button type="submit" (click)="delete(c.name)">Delete</button></span>
+        </tr>
+
+    </table>
+</div>

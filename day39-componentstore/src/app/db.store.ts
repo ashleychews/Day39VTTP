@@ -18,7 +18,7 @@ export class DBStore extends Dexie {
 
     }
 
-
+    
     addTodo(todos: Todo) : Promise<any> {
         return this.todo.add(todos)
     }

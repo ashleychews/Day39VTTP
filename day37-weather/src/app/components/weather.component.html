@@ -1,0 +1,54 @@
+<h2>Weather for {{city}}</h2>
+
+<button type="button" [routerLink]="['/']">Back</button>
+
+<br>
+<br>
+
+<div *ngIf="weather$ | async as weather; else noDisplay">
+
+    <table border="1">
+
+        <tr>
+            <td>Name</td>
+            <td>{{weather.name}}</td>
+        </tr>
+        
+        <tr>
+            <td>Temperature</td>
+            <td>{{weather.temp}}</td>
+        </tr>
+
+        <tr>
+            <td>Pressure</td>
+            <td>{{weather.pressure}}</td>
+        </tr>
+
+        <tr>
+            <td>Humidity</td>
+            <td>{{weather.humidity}}</td>
+        </tr>
+
+        <tr>
+            <td>Description</td>
+            <td>{{weather.description}}</td>
+        </tr>
+
+        <tr>
+            <td>Wind Speed</td>
+            <td>{{weather.speed}}</td>
+        </tr>
+
+        <tr>
+            <td>Wind Degree</td>
+            <td>{{weather.deg}}</td>
+        </tr>
+    
+    </table>
+
+</div>
+
+
+<ng-template #noDisplay>
+    <h2>No Weather Details found for this City</h2>
+</ng-template>
